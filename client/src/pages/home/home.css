@@ -1,0 +1,61 @@
+.secrets-page-section {
+  padding: 1rem;
+}
+
+.secret-container {
+  border: 1px solid black;
+  overflow-wrap: break-word;
+  min-height: 25vh;
+  border-radius: 20px;
+  margin: 2rem auto;
+  position: relative;
+  box-shadow: 0 1rem 2rem rgb(0 0 0 / 25%);
+  transition: all 0.2s;
+}
+
+.secret-container:hover {
+  transform: translatey(-0.1rem);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+}
+.secret-container:active,
+.secret-container:focus {
+  transform: translateY(0.2rem);
+
+  box-shadow: 0 0.75rem 0.75rem rgba(0, 0, 0, 0.5);
+}
+
+.secret-container__header {
+  background-color: blue;
+  color: #fff;
+  margin: 0 auto;
+  border-radius: 20px 20px 0 0;
+  padding: 1rem;
+}
+
+.secret-container__header h2 {
+  margin: 0 auto;
+}
+
+.secret-text {
+  margin: 2rem auto;
+  width: 80%;
+  padding: 1.5rem;
+}
+
+.author-footer {
+  position: absolute;
+  height: 30px;
+  bottom: 0;
+  left: 0;
+  padding: 0.5rem;
+  width: 100%;
+  background-color: rgb(151, 32, 32);
+  border-radius: 0 0 20px 20px;
+  color: #fff;
+}
+
+@media only screen and (min-width: 600px) {
+  .secret-container {
+    width: 50%;
+  }
+}

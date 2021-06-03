@@ -1,0 +1,14 @@
+@media only screen and (min-width: 600px) {
+  header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 5rem;
+  }
+
+  .nav-links-container {
+    display: flex;
+    justify-content: space-between;
+    flex-basis: 2rem;
+    width: 14rem;
+  }
+}
