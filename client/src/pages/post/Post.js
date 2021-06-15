@@ -38,6 +38,8 @@ const Post = () => {
   }, []);
 
   const submitComment = () => {
+    console.log("este es el id " + id);
+    console.log("estos son los comments " + comments.length);
     fetch("/comments", {
       method: "POST",
       body: JSON.stringify({
@@ -49,8 +51,13 @@ const Post = () => {
       .then(() => {
         setComments([
           ...comments,
-          { postId: id, commentBody: newComment, id: comments.length + 1 }
+          {
+            postId: id,
+            commentBody: newComment,
+            id: comments.length === 0 ? 1 : comments[comments.length - 1].id + 1
+          }
         ]);
+        setNewComment("");
       })
       .catch(error => {
         console.log(error);
@@ -97,6 +104,7 @@ const Post = () => {
           <h2>No comments yet</h2>
         ) : (
           <>
+            <h2>Comments</h2>
             {comments.map(comment => {
               return (
                 <div key={comment.id}>

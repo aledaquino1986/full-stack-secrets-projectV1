@@ -19,6 +19,9 @@ app.use("/posts", postRoute);
 const commentsRoute = require("./routes/Comments");
 app.use("/comments", commentsRoute);
 
+const usersRoute = require("./routes/Users");
+app.use("/users", usersRoute);
+
 /* DOTENV */
 const dotenv = require("dotenv");
 dotenv.config();

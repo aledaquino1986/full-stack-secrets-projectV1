@@ -4,6 +4,7 @@ import Navbar from "./components/navbar/Navbar";
 import CreatePost from "./pages/createpost/CreatePost";
 import Post from "./pages/post/Post";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Login from "./pages/login/Login";
 
 function App() {
   return (
@@ -21,6 +22,9 @@ function App() {
             <Post />
           </Route>
         </Switch>
+        <Route exact path="/users/login">
+          <Login />
+        </Route>
       </Router>
     </div>
   );

@@ -5,8 +5,6 @@ const router = express.Router();
 const { Comments } = require("../models/");
 
 router.get("/:postId", async (req, res) => {
-  console.log("llegué");
-  console.log(req.params);
   const commentId = req.params.postId;
   const comments = await Comments.findAll({
     where: {

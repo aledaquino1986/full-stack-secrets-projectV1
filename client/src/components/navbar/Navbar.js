@@ -17,6 +17,10 @@ const Navbar = () => {
           <li>
             <Link to="/write-secret"> Write your secret</Link>
           </li>
+
+          <li>
+            <Link to="/users/login"> Login</Link>
+          </li>
         </ul>
       </nav>
     </header>
