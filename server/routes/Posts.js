@@ -3,7 +3,6 @@ const router = express.Router();
 const { Posts } = require("../models");
 
 router.get("/", async (req, res) => {
-  console.log("llegué");
   const listOfPosts = await Posts.findAll();
   res.json(listOfPosts);
 });

@@ -1,4 +1,5 @@
 const express = require("express");
+const { validateToken } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
@@ -11,16 +12,28 @@ router.get("/:postId", async (req, res) => {
       PostId: commentId
     }
   });
-  console.log(comments);
+
   res.json(comments);
 });
 
-router.post("/", async (req, res) => {
-  console.log("llegué");
-  console.log(req.body);
+router.post("/", validateToken, async (req, res) => {
   const comment = req.body;
+  const username = req.user.username;
+  comment.username = username;
   await Comments.create(comment);
   res.json(comment);
+});
+
+router.delete("/:commentId", validateToken, (req, res) => {
+  const commentId = req.params.commentId;
+  console.log(commentId);
+  Comments.destroy({
+    where: {
+      id: commentId
+    }
+  });
+
+  res.json("Comment Deleted Successfully");
 });
 
 module.exports = router;
