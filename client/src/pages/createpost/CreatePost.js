@@ -1,11 +1,13 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useContext } from "react";
 import { formReducer, initialState } from "../../reducers/formReducer";
 import { useHistory } from "react-router-dom";
 
 import "./createpost.css";
+import { AuthContext } from "../../context/AuthContext";
 
 const CreatePost = () => {
   const [state, dispatch] = useReducer(formReducer, initialState);
+  const { authState } = useContext(AuthContext);
   let history = useHistory();
 
   const handleFormChange = (e, typeOfError) => {
@@ -15,16 +17,16 @@ const CreatePost = () => {
   };
 
   const onFormSubmit = e => {
-    const { secretText, title, userName } = state;
+    const { secretText, title } = state;
     e.preventDefault();
 
-    if (secretText.length >= 15 && title.length >= 10 && userName.length >= 5) {
+    if (secretText.length >= 15 && title.length >= 10) {
       fetch("/posts", {
         method: "POST",
         body: JSON.stringify({
           secretText,
           title,
-          userName
+          username: authState.username
         }),
         headers: { "Content-Type": "application/json" }
       })
@@ -46,12 +48,6 @@ const CreatePost = () => {
     }
 
     if (type === "secretText") {
-      value.length >= 5
-        ? dispatch({ type: "ADD_ERROR", [typeOfError]: true })
-        : dispatch({ type: "ADD_ERROR", [typeOfError]: false });
-    }
-
-    if (type === "userName") {
       value.length >= 5
         ? dispatch({ type: "ADD_ERROR", [typeOfError]: true })
         : dispatch({ type: "ADD_ERROR", [typeOfError]: false });
@@ -124,35 +120,11 @@ const CreatePost = () => {
           )
         }
       />
-      <label htmlFor="username">Username</label>
-      {!state.isUserNameValid && state.showIsUserNameValidError && (
-        <p>{state.userNameErrorMessage}</p>
-      )}
-      <input
-        type="text"
-        id="username"
-        name="userName"
-        placeholder="Example: Martin123"
-        onChange={e => handleFormChange(e, "isUserNameValid")}
-        value={state.userName}
-        onFocus={() =>
-          onFocusEffect(state.userName, 5, "showIsUserNameValidError")
-        }
-        onBlur={() =>
-          onBlurErrorEffect(
-            state.userName,
-            5,
-            "isUserNameValid",
-            "showIsUserNameValidError"
-          )
-        }
-      />
+
       <button
         type="submit"
         disabled={
-          state.secretText.length >= 15 &&
-          state.title.length >= 10 &&
-          state.userName.length >= 5
+          state.secretText.length >= 15 && state.title.length >= 10
             ? false
             : true
         }

@@ -1,18 +1,15 @@
-import React, { useReducer, useContext } from "react";
+import React, { useReducer } from "react";
 import { loginReducer, initialState } from "../../reducers/loginReducer";
 import { useHistory } from "react-router";
-import { AuthContext } from "../../context/AuthContext";
 
-const Login = () => {
+const Register = () => {
   const [state, dispatch] = useReducer(loginReducer, initialState);
-
-  const { setAuthState } = useContext(AuthContext);
   const history = useHistory();
 
   const submitLogin = e => {
     e.preventDefault();
 
-    fetch("/users/login", {
+    fetch("/users/register", {
       method: "POST",
       body: JSON.stringify({
         username: state.username,
@@ -24,12 +21,6 @@ const Login = () => {
         return response.json();
       })
       .then(data => {
-        localStorage.setItem("accessToken", data.token);
-        setAuthState({
-          username: data.username,
-          id: data.id.id,
-          status: true
-        });
         history.push("/");
       })
       .catch(error => {
@@ -65,4 +56,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

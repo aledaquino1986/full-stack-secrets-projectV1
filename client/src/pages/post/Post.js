@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "./post.css";
 import { useParams } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
 const Post = () => {
   const [post, setPost] = useState([]);
@@ -8,6 +9,8 @@ const Post = () => {
   const [comments, setComments] = useState([]);
   const [commentErrors, setCommentErrors] = useState("");
   const [newComment, setNewComment] = useState("");
+
+  const { authState } = useContext(AuthContext);
 
   let { id } = useParams();
 
@@ -38,23 +41,29 @@ const Post = () => {
   }, []);
 
   const submitComment = () => {
-    console.log("este es el id " + id);
-    console.log("estos son los comments " + comments.length);
     fetch("/comments", {
       method: "POST",
       body: JSON.stringify({
         commentBody: newComment,
         PostId: id
       }),
-      headers: { "Content-Type": "application/json" }
+      headers: {
+        "Content-Type": "application/json",
+        accessToken: localStorage.getItem("accessToken")
+      }
     })
-      .then(() => {
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
         setComments([
           ...comments,
           {
             postId: id,
             commentBody: newComment,
-            id: comments.length === 0 ? 1 : comments[comments.length - 1].id + 1
+            id:
+              comments.length === 0 ? 1 : comments[comments.length - 1].id + 1,
+            username: data.username
           }
         ]);
         setNewComment("");
@@ -62,6 +71,46 @@ const Post = () => {
       .catch(error => {
         console.log(error);
       });
+  };
+
+  const deleteComment = id => {
+    fetch(`/comments/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        accessToken: localStorage.getItem("accessToken")
+      }
+    })
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        const newComments = comments.filter(comment => comment.id !== id);
+        setComments(newComments);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  const likeAPost = id => {
+    fetch("/likes", {
+      method: "POST",
+      body: JSON.stringify({
+        PostId: id
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        accessToken: localStorage.getItem("accessToken")
+      }
+    })
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        console.log(data);
+      })
+      .catch(err => console.log(err));
   };
 
   const { title, secretText, userName } = post;
@@ -82,13 +131,14 @@ const Post = () => {
 
           <footer className="author-footer">
             <p>Author: {userName}</p>
+            <button onClick={() => likeAPost(post.id)}>Like Post</button>
           </footer>
         </div>
       </section>
 
       <section className="comments-section">
         <div className="add-comment">
-          <label htmlFor="add-comment"></label>
+          <label htmlFor="add-comment">Add comment</label>
           <textarea
             value={newComment}
             onChange={e => setNewComment(e.target.value)}
@@ -107,8 +157,36 @@ const Post = () => {
             <h2>Comments</h2>
             {comments.map(comment => {
               return (
-                <div key={comment.id}>
-                  <p>{comment.commentBody}</p>
+                <div
+                  key={comment.id}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center"
+                  }}
+                >
+                  <p
+                    style={{
+                      marginRight: "1rem"
+                    }}
+                  >
+                    {comment.commentBody}
+                  </p>{" "}
+                  <span
+                    style={{
+                      fontWeight: "bolder"
+                    }}
+                  >
+                    {" "}
+                    {comment.username}
+                  </span>
+                  {authState.username === comment.username && (
+                    <>
+                      <button onClick={() => deleteComment(comment.id)}>
+                        X
+                      </button>
+                    </>
+                  )}
                 </div>
               );
             })}

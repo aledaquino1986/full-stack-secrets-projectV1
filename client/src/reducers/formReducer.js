@@ -7,9 +7,6 @@ export const initialState = {
   secretTextErrorMessage: "The secret should be of at least 15 characters",
   isSecretTextValid: false,
   showisSecretTextError: false,
-  userName: "",
-  userNameErrorMessage: "The username should be of at least 5 characters",
-  isUserNameValid: false,
   showIsUserNameValidError: false,
   canSendForm: false
 };

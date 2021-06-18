@@ -22,6 +22,9 @@ app.use("/comments", commentsRoute);
 const usersRoute = require("./routes/Users");
 app.use("/users", usersRoute);
 
+const likesRoute = require("./routes/Likes");
+app.use("/likes", likesRoute);
+
 /* DOTENV */
 const dotenv = require("dotenv");
 dotenv.config();
